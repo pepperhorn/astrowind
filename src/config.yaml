@@ -1,6 +1,6 @@
 site:
-  name: AstroWind
-  site: 'https://astrowind.vercel.app'
+  name: Members
+  site: 'https://members.rangesmusic.net'
   base: '/'
   trailingSlash: false
 
@@ -9,22 +9,22 @@ site:
 # Default SEO metadata
 metadata:
   title:
-    default: AstroWind
-    template: '%s — AstroWind'
-  description: "\U0001F680 Suitable for Startups, Small Business, Sass Websites, Professional Portfolios, Marketing Websites, Landing Pages & Blogs."
+    default: RMN Members
+    template: '%s — Connecting your creativity with inspiration.'
+  description: "The spot for resources, inspiration and more for our musicians."
   robots:
-    index: true
-    follow: true
+    index: false
+    follow: false
   openGraph:
-    site_name: AstroWind
+    site_name: RMN Members
     images:
-      - url: '~/assets/images/default.png'
-        width: 1200
-        height: 628
+      - url: '~/assets/images/rmnsq.svg'
+        width: 600
+        height: 600
     type: website
   twitter:
-    handle: '@onwidget'
-    site: '@onwidget'
+    handle: '@rangesmusicnet'
+    site: '@rangesmusicnet'
     cardType: summary_large_image
 
 i18n:
@@ -40,19 +40,19 @@ apps:
       isEnabled: true
       permalink: '/%slug%' # Variables: %slug%, %year%, %month%, %day%, %hour%, %minute%, %second%, %category%
       robots:
-        index: true
+        index: false
 
     list:
       isEnabled: true
       pathname: 'blog' # Blog main path, you can change this to "articles" (/articles)
       robots:
-        index: true
+        index: false
 
     category:
       isEnabled: true
       pathname: 'category' # Category main path /category/some-category, you can change this to "group" (/group/some-category)
       robots:
-        index: true
+        index: false
 
     tag:
       isEnabled: true

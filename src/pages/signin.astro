@@ -1,0 +1,59 @@
+---
+
+import Layout from '~/layouts/LandingLayout.astro';
+
+import Hero2 from '~/components/widgets/Hero2.astro';
+import MemberSignInForm from '~/components/widgets/MemberSignInForm.astro';
+import MembersOTP from '~/components/widgets/MembersOTP.astro';
+import type { MembersOTP, MemberSignInForm, Widget } from '~/types';
+
+
+const metadata = {
+  title: 'RMN Member Sign In',
+};
+
+---
+
+<Layout metadata={metadata}>
+  <!-- Hero2 Widget ******************* -->
+
+  <Hero2
+    tagline="Connect with the Ranges Music Network"
+    title="Accessible, Inclusive Music Education in the Macedon Ranges"
+    subtitle="Ready to join or want to learn more?<br/>Find out about our fun and engaging in-school and community programs for all ages at rangesmusic.net."
+    actions={[
+      { variant: 'primary', text: 'Visit Rangesmusic.net', href: 'https://rangesmusic.net', icon: 'tabler:square-rounded-arrow-right' },
+      { text: 'Member Sign In', href: '#member-sign-in-form' },
+    ]}
+    image={{
+      src: '~/assets/images/rmn-t4-hero.png',
+      alt: 'Preview of Rangesmusic.net',
+    }}
+  />
+
+  <MemberSignInForm 
+    title="Knock Knock .."
+    subtitle="Who's there?  Use your exclusive, 3 secret words to access your content, messages from your mentor, videos, music to play and more!"
+    tagline="Members Sign In Here"
+    id="member-sign-in-form"
+    isDark={false}
+    classes={{
+      container: 'mb-0 md:mb-0',
+        title: 'text-4xl md:text-4xl font-bold tracking-tighter mb-4 font-heading',
+        subtitle: 'text-xl text-muted dark:text-slate-400',
+    }}
+    bg={} server:defer />
+
+
+    <MembersOTP
+tagline="One time passcode"
+title="Verify your one time passcode"
+subtitle="Please ask your parent or guardian to check their email for this one time passcode."
+id="member-opt"
+isDark={false}
+classes={{
+  container: 'mt-12',
+}}
+bg={} server:defer />
+
+</Layout>

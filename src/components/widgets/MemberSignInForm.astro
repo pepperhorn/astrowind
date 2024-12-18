@@ -1,0 +1,158 @@
+---
+import WidgetWrapper from '../ui/WidgetWrapper.astro';
+// import Headline from '~/components/ui/Headline.astro';
+// import Button from '~/components/ui/Button.astro';
+import Logo from '~/components/Logo.astro';
+import MemberoTP from '~/components/widgets/MemberOTP.astro';
+import { getHomePermalink } from '~/utils/permalinks';
+
+interface Props extends Widget {
+   title?: string;
+  subtitle?: string;
+   tagline?: string;
+  // callToAction?: CallToAction;
+  // actions?: string | CallToAction[];
+}
+
+const {
+   title = await Astro.slots.render('title'),
+   subtitle = await Astro.slots.render('subtitle'),
+   tagline = await Astro.slots.render('tagline'),
+  // actions = await Astro.slots.render('actions'),
+
+  id = 'member-sign-in-form',
+  isDark = false,
+  classes = {},
+  bg = await Astro.slots.render('bg'),
+} = Astro.props;
+
+
+---
+
+<WidgetWrapper id={id} isDark={isDark} containerClass={`max-w-6xl mx-auto ${classes?.container ?? ''}`} bg={bg}>
+
+<div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
+  <div class="sm:mx-auto sm:w-full sm:max-w-sm">
+    <a class="flex justify-center items-center" href={getHomePermalink()}>
+      <Logo />
+    </a>
+    
+  </div>
+
+  <div class="mt-10">
+    {tagline && (
+      <p class="flex justify-center text-base text-secondary dark:text-blue-200 font-bold tracking-wide uppercase" set:html={tagline} />
+    )}
+    <h2 class="mt-2 text-center text-2xl/9 font-bold tracking-tight text-gray-900">{title}</h2>
+    <p class="mt-2 text-center text-sm/6 text-gray-600">{subtitle}</p>
+  </div>
+
+  <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+    <form name="login-form" id="login-form" class="space-y-6" method="POST" data-astro-reload>
+      <div>
+        <div class="mt-2 flex items-center justify-center gap-3">
+        <label for="secret-code" class="font-semibold text-sm/8 font-medium text-gray-900">Enter your secret member code</label>
+          <input type="hidden" id="hidden-value" name="hidden" value="this" />
+          <a href="#" class="text-sm/8 text-indigo-600 hover:text-indigo-500">What's my secret?</a>
+        </div>
+          <div class="mt-2 flex items-center justify-center gap-3">
+        <!--first word -->
+          <input
+          type="text" name="secret1" id="secret1"
+          class="w-15 h-14 text-center text-2xl font-extrabold text-slate-900 bg-slate-100 border border-transparent hover:border-slate-200 appearance-none rounded p-4 outline-none focus:bg-white focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100"
+           required />
+           <span class="text-2xl">-</span>
+          <!--second word -->
+          <input
+          type="text" name="secret2" id="secret2"
+          class="w-15 h-14 text-center text-2xl font-extrabold text-slate-900 bg-slate-100 border border-transparent hover:border-slate-200 appearance-none rounded p-4 outline-none focus:bg-white focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100"
+           required />
+           <span class="text-2xl">-</span>
+          <!--third word -->
+          <input
+          type="text" name="secret3" id="secret3"
+          class="w-15 h-14 text-center text-2xl font-extrabold text-slate-900 bg-slate-100 border border-transparent hover:border-slate-200 appearance-none rounded p-4 outline-none focus:bg-white focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100"
+           required />
+           
+        </div>
+      </div>
+
+      <div>
+        <button type="submit" class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Sign in</button>
+      </div>
+    </form>
+
+    <p class="mt-10 text-center text-sm/6 text-gray-500">
+      Not a member?
+      <a href="https://rangesmusic.net/" class="font-semibold text-indigo-600 hover:text-indigo-500">Get started at rangesmusic.net >></a>
+    </p>
+  </div>
+</div>
+
+</WidgetWrapper>
+
+<script>
+  import { actions } from "astro:actions";
+  import { isInputError } from "astro:actions";
+
+  function clearPreviousMessage(id: string) {
+    const messageElement = document.getElementById(id);
+    if (messageElement) {
+      messageElement.remove();
+    }
+  }
+
+  function addMessageElement(
+    message: string,
+    type: "error" | "success",
+    element: HTMLElement
+  ) {
+    const p = document.createElement("p");
+
+    p.id = "message";
+    p.className = `message ${type === "success" ? "text-stone-500" : "text-amber-300"} mt-2 px-2`;
+    p.innerText = message;
+    form.appendChild(p);
+    p.innerText = message;
+    element.appendChild(p);
+  }
+
+  function clearInput(ids: string[]) {
+    ids.forEach(id => {
+      const inputElement = document.getElementById(id) as HTMLInputElement;
+      if (inputElement) inputElement.value = "";
+    });
+  }
+
+  function renderMessage(error: any, data: any, form: HTMLFormElement) {
+    if (error && isInputError(error)) {
+      const message = error.fields.email && error.fields.email[0];
+      addMessageElement(message || "", "error", form);
+    } else {
+      if (data?.strapiErrors) {
+        const message = data?.strapiErrors.message;
+        addMessageElement(message, "error", form);
+      } else {
+        const message = "Form submitted, thank you.";
+        clearInput(["secret-1","secret-2","secret-3"]);
+        addMessageElement(message, "success", form);
+      }
+    }
+  }
+
+  const form = document.getElementById("login-form") as HTMLFormElement;
+
+  async function handleFormSubmit(e: Event) {
+    e.preventDefault();
+
+    const formData = new FormData(form);
+
+    const { data, error } = await actions.secretcode(formData);
+
+    clearPreviousMessage("message");
+    renderMessage(error, data, form);
+  }
+
+  form.addEventListener("submit", handleFormSubmit);
+</script>
+  
